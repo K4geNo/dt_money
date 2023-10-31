@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('description');
             $table->decimal('amount', 10, 2);
+            $table->string('category');
             $table->enum('type', ['income', 'expense']);
             $table->timestamps();
         });
