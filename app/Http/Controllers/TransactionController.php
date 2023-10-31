@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class TransactionController extends Controller
 {
@@ -22,7 +23,7 @@ class TransactionController extends Controller
         // Get all transactions to inertia
         $transactions = $this->transaction->all();
 
-        return inertia('Transactions/Index', [
+        return Inertia::inertia('Transactions/Index', [
             'transactions' => $transactions,
         ]);
     }
@@ -33,7 +34,7 @@ class TransactionController extends Controller
     public function create()
     {
         // Return the inertia view
-        return inertia('Transactions/Create');
+        return Inertia::render('Dashboard');
     }
 
     /**
@@ -46,6 +47,7 @@ class TransactionController extends Controller
             'description' => 'required|string',
             'amount' => 'required|numeric',
             'type' => 'required|in:income,expense',
+            'category' => 'required|string'
         ]);
 
         // Create the transaction
@@ -64,7 +66,7 @@ class TransactionController extends Controller
         $transaction = $this->transaction->findOrFail($id);
 
         // Return the inertia view
-        return inertia('Transactions/Show', [
+        return Inertia::inertia('Transactions/Show', [
             'transaction' => $transaction,
         ]);
     }
@@ -78,7 +80,7 @@ class TransactionController extends Controller
         $transaction = $this->transaction->findOrFail($id);
 
         // Return the inertia view
-        return inertia('Transactions/Edit', [
+        return Inertia::inertia('Transactions/Edit', [
             'transaction' => $transaction,
         ]);
     }
