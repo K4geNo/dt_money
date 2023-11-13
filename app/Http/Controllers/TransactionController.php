@@ -8,22 +8,15 @@ use Inertia\Inertia;
 
 class TransactionController extends Controller
 {
-    protected readonly Transaction $transaction;
-
-    public function __construct()
-    {
-        $this->transaction = new Transaction();
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         // Get all transactions to inertia
-        $transactions = $this->transaction->all();
+        $transactions = Transaction::all();
 
-        return Inertia::inertia('Transactions/Index', [
+        return Inertia::render('Dashboard', [
             'transactions' => $transactions,
         ]);
     }
@@ -42,19 +35,16 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the request
-        $request->validate([
-            'description' => 'required|string',
-            'amount' => 'required|numeric',
-            'type' => 'required|in:income,expense',
-            'category' => 'required|string'
+        $transaction = new Transaction([
+            'description' => $request->description,
+            'amount' => $request->amount,
+            'type' => $request->type,
+            'category' => $request->category,
         ]);
 
-        // Create the transaction
-        $this->transaction->create($request->all());
+        $transaction->save();
 
-        // Redirect to the index page
-        return redirect()->route('Dashboard');
+        return redirect('dashboard');
     }
 
     /**
@@ -63,10 +53,10 @@ class TransactionController extends Controller
     public function show(string $id)
     {
         // Get the transaction
-        $transaction = $this->transaction->findOrFail($id);
+        $transaction = Transaction::findOrFail($id);
 
         // Return the inertia view
-        return Inertia::inertia('Transactions/Show', [
+        return Inertia::render('Transactions/Show', [
             'transaction' => $transaction,
         ]);
     }
@@ -77,10 +67,10 @@ class TransactionController extends Controller
     public function edit(string $id)
     {
         // Get the transaction
-        $transaction = $this->transaction->findOrFail($id);
+        $transaction = Transaction::findOrFail($id);
 
         // Return the inertia view
-        return Inertia::inertia('Transactions/Edit', [
+        return Inertia::render('Transactions/Edit', [
             'transaction' => $transaction,
         ]);
     }
@@ -98,7 +88,7 @@ class TransactionController extends Controller
         ]);
 
         // Get the transaction
-        $transaction = $this->transaction->findOrFail($id);
+        $transaction = Transaction::findOrFail($id);
 
         // Update the transaction
         $transaction->update($request->all());
@@ -113,7 +103,7 @@ class TransactionController extends Controller
     public function destroy(string $id)
     {
         // Get the transaction
-        $transaction = $this->transaction->findOrFail($id);
+        $transaction = Transaction::findOrFail($id);
 
         // Delete the transaction
         $transaction->delete();

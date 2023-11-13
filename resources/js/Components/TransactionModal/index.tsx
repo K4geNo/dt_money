@@ -8,25 +8,30 @@ import { useForm } from "@inertiajs/react";
 import { useState } from "react";
 
 export function TransactionModal() {
-    const [isSelectedOne, setIsSelectedOne] = useState(false);
-    const [isSelectedTwo, setIsSelectedTwo] = useState(false);
+    const [open, setOpen] = useState(false);
 
-    const { data, setData, post, errors, reset } = useForm({
+    const { data, setData, post, errors, reset, processing } = useForm({
         description: '',
-        price: '',
+        amount: '',
         category: '',
-        type: '',
+        type: 'income',
     })
-    console.log(data)
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // post(route('transactions.store'));
+        post(route('transactions.store'));
+
+        reset();
+
+        setOpen(false);
     }
 
     return (
-        <Dialog>
+        <Dialog
+            open={open}
+            onOpenChange={setOpen}
+        >
             <DialogTrigger asChild>
                 <button className="bg-[#00875F] px-5 py-3 rounded-md text-white">
                     Nova transação
@@ -42,7 +47,9 @@ export function TransactionModal() {
 
                 <form className="pt-8" onSubmit={onSubmit}>
                     <div className="flex flex-col">
-                        <Input placeholder="Descrição" type="text"
+                        <Input
+                            placeholder="Descrição"
+                            type="text"
                             onChange={(e) => setData('description', e.target.value)}
                             value={data.description}
                         />
@@ -50,10 +57,10 @@ export function TransactionModal() {
 
                     <div className="flex flex-col pt-4">
                         <Input
-                            placeholder="Preço"
+                            placeholder="Preço (R$)"
                             type="number"
-                            onChange={(e) => setData('price', e.target.value)}
-                            value={data.price}
+                            onChange={(e) => setData('amount', e.target.value)}
+                            value={data.amount}
                         />
                     </div>
 
@@ -66,51 +73,43 @@ export function TransactionModal() {
                         />
                     </div>
 
-                    <RadioGroup defaultValue="income" className="flex gap-x-4 w-full pt-6"
-                        onValueChange={(value) => setData('type', value)}
-                        // onValueChange={(value) => console.log(value)}
+                    <RadioGroup
+                        defaultValue="income"
+                        className="flex w-full pt-6 gap-x-4"
+                        onValueChange={(value: string) => setData('type', value)}
                     >
                         <div className="flex items-center w-full">
                             <RadioGroupItem
                                 value="income"
                                 id="income"
-                                className="hidden"
-                            />
-                            <label
-                                htmlFor="income"
                                 className={cn(
-                                    "w-full py-4 px-6 bg-shape-secundaria border border-transparent rounded-md text-center cursor-pointer",
-                                    isSelectedOne && "border-green-light"
+                                    "w-full text-center border border-transparent rounded-md cursor-pointer h-14",
+                                    "bg-shape-secundaria radix-state-checked:bg-green-dark"
                                 )}
-                                onClick={() => setIsSelectedOne(!isSelectedOne)}
                             >
-                                <ArrowUpCircle className="h-6 w-6 mx-auto inline text-green mr-2" />
+                                <ArrowUpCircle className="inline w-6 h-6 mx-auto mr-2 text-white" />
                                 <span className="text-text-base">Entrada</span>
-                            </label>
+                            </RadioGroupItem>
                         </div>
                         <div className="flex items-center w-full">
                             <RadioGroupItem
                                 value="expense"
                                 id="expense"
-                                className="hidden"
-                            />
-                            <label
-                                htmlFor="expense"
                                 className={cn(
-                                    "w-full py-4 px-6 bg-shape-secundaria border border-transparent rounded-md text-center cursor-pointer",
-                                    isSelectedTwo && "border-green-light"
+                                    "w-full text-center border border-transparent rounded-md cursor-pointer h-14",
+                                    "bg-shape-secundaria radix-state-checked:bg-red-dark"
                                 )}
-                                onClick={() => setIsSelectedTwo(!isSelectedTwo)}
                             >
-                                <ArrowDownCircle className="h-6 w-6 mx-auto inline text-red mr-2" />
+                                <ArrowDownCircle className="inline w-6 h-6 mx-auto mr-2 text-white" />
                                 <span className="text-text-base">Saída</span>
-                            </label>
+                            </RadioGroupItem>
                         </div>
                     </RadioGroup>
 
                     <button
                         type="submit"
                         className="w-full bg-[#00875F] py-4 rounded-md text-white font-bold mt-10"
+                        disabled={processing}
                     >
                         Cadastrar
                     </button>

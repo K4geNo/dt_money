@@ -9,4 +9,11 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     auth: {
         user: User;
     };
+    transactions: {
+        id: number;
+        description: string;
+        amount: number;
+        type: string;
+        category: string
+    }[]
 };
