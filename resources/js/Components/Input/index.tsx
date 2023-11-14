@@ -12,6 +12,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 type={type}
                 className={cn(
                     'p-4 rounded-md bg-background text-placeholder',
+                    className,
                 )}
                 ref={ref}
                 {...props}

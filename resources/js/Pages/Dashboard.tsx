@@ -1,9 +1,17 @@
+import { useContext, useState } from 'react';
+
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { CardTable } from '@/Components/CardTable';
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
-import { CardTable } from '@/Components/CardTable';
+import { Search } from '@/Components/Search';
+import { Summary } from '@/Components/Summary';
 
 export default function Dashboard({ auth, transactions }: PageProps) {
+    const [search, setSearch] = useState('')
+
+    const filteredTransactions = transactions.filter(e => e.description.includes(search))
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -12,10 +20,14 @@ export default function Dashboard({ auth, transactions }: PageProps) {
             <Head title="Dashboard" />
 
             <div className="py-12">
-                <div className="mx-auto max-w-7xl">
-                    <div className="overflow-hidden bg-white shadow-sm dark:bg-shape-principal sm:rounded-lg">
+                <div className="max-w-[1120px] mx-auto">
+                    <Summary />
+
+                    <Search setSearch={setSearch} />
+
+                    <div className="mt-6 overflow-hidden bg-white shadow-sm dark:bg-shape-principal sm:rounded-lg">
                         <div className="flex flex-col text-gray-900 dark:text-gray-100 gap-y-2">
-                            {transactions.map((transaction) => (
+                            {filteredTransactions.map((transaction) => (
                                 <CardTable
                                     key={transaction.id}
                                     transaction={transaction}
