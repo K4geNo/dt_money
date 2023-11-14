@@ -3,6 +3,7 @@ import { PropsWithChildren, ReactNode, useState } from 'react';
 import Dropdown from '@/Components/Dropdown';
 import { Link } from '@inertiajs/react';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
+import { Separator } from '@/Components/Separator';
 import { TransactionModal } from '@/Components/TransactionModal';
 import { User } from '@/types';
 
@@ -10,9 +11,9 @@ export default function Authenticated({ user, header, children }: PropsWithChild
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100 dark:bg-shape-principal">
+        <div className="w-full min-h-screen bg-gray-100 dark:bg-shape-principal">
             <nav className="bg-white pt-10 dark:bg-background h-[212px] border-b border-background/10 dark:border-gray-700">
-                <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div className="max-w-[1120px] mx-auto">
                     <div className="flex justify-between h-16">
                         <div className="flex">
                             <div className="flex items-center shrink-0">
@@ -22,10 +23,15 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                             </div>
                         </div>
 
-                        <div className="flex items-center">
+                        <div className="flex items-center gap-x-4">
                             <TransactionModal />
 
-                            <div className="relative ml-3">
+                            <Separator
+                                orientation='vertical'
+                                className='h-10 bg-white'
+                            />
+
+                            <div className="relative">
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md">
