@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
+use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -19,7 +21,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return Inertia::render('Login', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
@@ -29,16 +31,28 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard' , [
-        'transactions' => Transaction::all()
+        'transactions' => Transaction::all(),
+        'categories' => Category::all()
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/report', function () {
+    return Inertia::render('Report', [
+        'transactions' => Transaction::all()
+    ]);
+})->middleware(['auth', 'verified'])->name('report');
+
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Define a constant for the "/profile" route path
+    define('PROFILE_ROUTE', '/profile');
+
+    Route::get(PROFILE_ROUTE, [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch(PROFILE_ROUTE, [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete(PROFILE_ROUTE, [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('transactions', TransactionController::class);
+    Route::resource('categories', CategoryController::class);
 });
 
 require __DIR__.'/auth.php';
