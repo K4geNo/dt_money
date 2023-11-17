@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -35,11 +36,13 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
+        $category = Category::find($request->category_id);
+
         $transaction = new Transaction([
             'description' => $request->description,
             'amount' => $request->amount,
             'type' => $request->type,
-            'category' => $request->category,
+            'category_id' => $category->id,
         ]);
 
         $transaction->save();
@@ -70,7 +73,7 @@ class TransactionController extends Controller
         $transaction = Transaction::findOrFail($id);
 
         // Return the inertia view
-        return Inertia::render('Transactions/Edit', [
+        return Inertia::render('Dashboard', [
             'transaction' => $transaction,
         ]);
     }
@@ -94,7 +97,7 @@ class TransactionController extends Controller
         $transaction->update($request->all());
 
         // Redirect to the index page
-        return redirect()->route('Dashboard');
+        return redirect('dashboard');
     }
 
     /**
@@ -109,6 +112,6 @@ class TransactionController extends Controller
         $transaction->delete();
 
         // Redirect to the index page
-        return redirect()->route('Dashboard');
+        return redirect('dashboard');
     }
 }
