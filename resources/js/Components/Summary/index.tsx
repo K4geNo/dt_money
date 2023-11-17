@@ -1,6 +1,33 @@
-import { ArrowDownCircle, ArrowUpCircle, DollarSign } from "lucide-react";
+import { ArrowDownCircle, ArrowUpCircle, DollarSign } from 'lucide-react'
 
-export function Summary() {
+import { formattedPrice } from '@/utils/fomartPrice'
+
+interface TransactionProps {
+    id: number
+    description: string
+    amount: number
+    type: string
+}
+
+interface SummaryProps {
+    transactions: TransactionProps[]
+}
+
+export function Summary({ transactions }: SummaryProps) {
+    const totals = transactions.reduce(
+        (acc, transaction) => {
+            if (transaction.type === 'income') {
+                acc.totalIncome += Number(transaction.amount)
+            } else if (transaction.type === 'expense') {
+                acc.totalOutcome += Number(transaction.amount)
+            }
+            return acc
+        },
+        { totalIncome: 0, totalOutcome: 0 },
+    )
+
+    const total = totals.totalIncome - totals.totalOutcome
+
     return (
         <section className="grid w-full grid-cols-3 gap-x-8 -mt-[120px]">
             <div className="flex flex-col px-8 py-6 rounded-md gap-y-3 bg-shape-terciaria">
@@ -11,7 +38,7 @@ export function Summary() {
                 </div>
 
                 <span className="text-[32px] font-bold text-white">
-                    R$ 17.400,00
+                    {formattedPrice(totals.totalIncome)}
                 </span>
             </div>
 
@@ -23,7 +50,7 @@ export function Summary() {
                 </div>
 
                 <span className="text-[32px] font-bold text-white">
-                    R$ 17.400,00
+                    {formattedPrice(totals.totalOutcome)}
                 </span>
             </div>
 
@@ -35,7 +62,7 @@ export function Summary() {
                 </div>
 
                 <span className="text-[32px] font-bold text-white">
-                    R$ 17.400,00
+                    {formattedPrice(total)}
                 </span>
             </div>
         </section>
