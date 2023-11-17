@@ -14,7 +14,12 @@ class Transaction extends Model
     protected $fillable = [
         'description',
         'amount',
-        'category',
+        'category_id',
         'type',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
