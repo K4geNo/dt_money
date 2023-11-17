@@ -8,6 +8,3 @@ services:
       POSTGRES_DB: dt_money
     ports:
       - "5432:5432"
-
-volumes:
-  postgres_data:
