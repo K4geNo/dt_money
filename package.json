@@ -16,6 +16,7 @@
         "@vitejs/plugin-react": "^4.0.3",
         "autoprefixer": "^10.4.12",
         "axios": "^1.1.2",
+        "eslint-config-k4geno": "^1.0.2",
         "laravel-vite-plugin": "^0.8.0",
         "postcss": "^8.4.18",
         "react": "^18.2.0",
@@ -26,10 +27,16 @@
     },
     "dependencies": {
         "@radix-ui/react-dialog": "^1.0.5",
+        "@radix-ui/react-icons": "^1.3.0",
         "@radix-ui/react-radio-group": "^1.1.3",
+        "@radix-ui/react-select": "^2.0.0",
         "@radix-ui/react-separator": "^1.0.3",
+        "@radix-ui/react-tooltip": "^1.0.7",
         "clsx": "^2.0.0",
+        "date-fns": "^2.30.0",
         "lucide-react": "^0.290.0",
+        "react-toastify": "^9.1.3",
+        "recharts": "^2.9.3",
         "tailwind-merge": "^2.0.0",
         "tailwindcss-radix": "^2.8.0"
     }
