@@ -16,10 +16,17 @@ class Transaction extends Model
         'amount',
         'category_id',
         'type',
+        'user_id'
     ];
 
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    // Adicione este método
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

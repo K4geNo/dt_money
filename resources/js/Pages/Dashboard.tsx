@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { CardTable } from '@/Components/CardTable'
+import { ClipboardX } from 'lucide-react'
 import { Head } from '@inertiajs/react'
 import { PageProps } from '@/types'
 import { Search } from '@/Components/Search'
@@ -19,8 +20,12 @@ export default function Dashboard({
 
     const { setCategories } = useCategories()
 
+    console.log(transactions?.length)
+
     useEffect(() => {
-        setCategories(categories)
+        return () => {
+            setCategories(categories)
+        }
     }, [categories, setCategories])
 
     const filteredTransactions = filterTransactions({
@@ -41,16 +46,34 @@ export default function Dashboard({
 
                     <Search setSearch={setSearch} />
 
-                    <div className="mt-6 overflow-hidden bg-white shadow-sm dark:bg-shape-principal sm:rounded-lg">
-                        <div className="flex flex-col text-gray-900 dark:text-gray-100 gap-y-2">
-                            {sortedFilteredTransactions.map((transaction) => (
-                                <CardTable
-                                    key={transaction.id}
-                                    transaction={transaction}
-                                />
-                            ))}
+                    {transactions?.length >= 1 && (
+                        <div className="mt-6 overflow-hidden bg-white shadow-sm dark:bg-shape-principal sm:rounded-lg">
+                            <div className="flex flex-col text-gray-900 dark:text-gray-100 gap-y-2">
+                                {sortedFilteredTransactions?.map(
+                                    (transaction) => (
+                                        <CardTable
+                                            key={transaction.id}
+                                            transaction={transaction}
+                                        />
+                                    ),
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    )}
+
+                    {transactions?.length < 1 && (
+                        <div className="flex flex-col items-center justify-center w-full mt-6 gap-y-2">
+                            <ClipboardX size={50} className="text-zinc-600" />
+
+                            <span className="text-2xl text-zinc-600">
+                                Nenhuma dado encontrado.
+                            </span>
+
+                            <span className="text-2xl text-zinc-600">
+                                Adicione uma nova transação! 😃
+                            </span>
+                        </div>
+                    )}
                 </div>
             </div>
         </AuthenticatedLayout>

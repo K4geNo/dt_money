@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class TransactionController extends Controller
@@ -15,7 +16,8 @@ class TransactionController extends Controller
     public function index()
     {
         // Get all transactions to inertia
-        $transactions = Transaction::all();
+        // $transactions = Transaction::all();
+        $transactions = Auth::user()->transactions;
 
         return Inertia::render('Dashboard', [
             'transactions' => $transactions,
@@ -43,6 +45,7 @@ class TransactionController extends Controller
             'amount' => $request->amount,
             'type' => $request->type,
             'category_id' => $category->id,
+            'user_id' => Auth::id(),
         ]);
 
         $transaction->save();

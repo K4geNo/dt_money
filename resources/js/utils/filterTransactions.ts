@@ -15,20 +15,25 @@ interface FilterTransactionsProps {
     search: string
 }
 
+/**
+ * Filters transactions based on the provided criteria.
+ * @param {FilterTransactionsProps} options - The options for filtering transactions.
+ * @returns {Transaction[]} - The filtered transactions.
+ */
 export function filterTransactions({
     transactions,
     categories,
     search,
-}: FilterTransactionsProps) {
+}: FilterTransactionsProps): Transaction[] {
     const searchLowercase = search.toLowerCase()
 
-    return transactions.filter((transaction) => {
-        const category = categories.find(
-            (category) => category.id === transaction.category_id,
+    return transactions?.filter((transaction) => {
+        const category = categories?.find(
+            (category) => category?.id === transaction?.category_id,
         )
 
         const categoryName = category?.category.toLowerCase() ?? ''
-        const transactionDescription = transaction.description.toLowerCase()
+        const transactionDescription = transaction?.description.toLowerCase()
 
         return (
             transactionDescription.includes(searchLowercase) ||

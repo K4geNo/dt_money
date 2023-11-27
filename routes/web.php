@@ -6,6 +6,7 @@ use App\Http\Controllers\TransactionController;
 use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -27,18 +28,21 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/dashboard', function () {
+    $user = Auth::user();
+
     return Inertia::render('Dashboard' , [
-        'transactions' => Transaction::all(),
+        'transactions' => $user->transactions,
         'categories' => Category::all()
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/report', function () {
+    $user = Auth::user();
     return Inertia::render('Report', [
-        'transactions' => Transaction::all()
+        'transactions' => $user->transactions
     ]);
 })->middleware(['auth', 'verified'])->name('report');
 
